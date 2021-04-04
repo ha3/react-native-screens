@@ -1,5 +1,6 @@
 package com.swmansion.rnscreens;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -7,14 +8,17 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.SearchView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
@@ -37,12 +41,12 @@ public class ScreenStackHeaderConfig extends ViewGroup {
   private boolean mIsBackButtonHidden;
   private boolean mIsShadowHidden;
   private boolean mDestroyed;
+  private SearchView mSearchBar;
   private boolean mBackButtonInCustomView;
   private boolean mIsTopInsetEnabled = true;
   private boolean mIsTranslucent;
   private int mTintColor;
   private final Toolbar mToolbar;
-
   private boolean mIsAttachedToWindow = false;
 
   private int mDefaultStartInset;
@@ -295,6 +299,15 @@ public class ScreenStackHeaderConfig extends ViewGroup {
           params.width = LayoutParams.MATCH_PARENT;
           params.gravity = Gravity.CENTER_HORIZONTAL;
           mToolbar.setTitle(null);
+          break;
+        case SEARCHBAR:
+          SearchView mSearchBar = (SearchView) view.getChildAt(0);
+          Menu menu = MenuBuilder(getContext())
+          MenuInflater inflater = activity.getMenuInflater();
+          inflater.inflate(R.menu.options_menu, null);
+          actionBar.setCustomView(v);
+          SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
+          mSearchBar.setSearchableInfo(searchManager.getSearchableInfo(activity.getComponentName()));
           break;
       }
 
